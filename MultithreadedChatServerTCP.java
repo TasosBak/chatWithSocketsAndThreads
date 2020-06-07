@@ -28,13 +28,20 @@ public class MultithreadedChatServerTCP {
 
 			dataSockets.add(socketCount, connectionSocket.accept());
 			System.out.println("Received request from " + dataSockets.get(1).getInetAddress());
+			socketCount++;
 
-			threads.add(threadCount, new ServerThread(dataSockets.get(0), dataSockets.get(1)));
+			dataSockets.add(socketCount, connectionSocket.accept());
+			System.out.println("Received request from " + dataSockets.get(2).getInetAddress());
+
+			threads.add(threadCount, new ServerThread(threadCount, dataSockets.get(0)));
 
 			threadCount++;
-			threads.add(threadCount, new ServerThread(dataSockets.get(1), dataSockets.get(0)));
+			threads.add(threadCount, new ServerThread(threadCount, dataSockets.get(1)));
 
-			if (threadCount == 1) {
+			threadCount++;
+			threads.add(threadCount, new ServerThread(threadCount, dataSockets.get(2)));
+
+			if (threadCount == 2) {
 				System.out.println("enough clients");
 				for (ServerThread thread : threads)
 					thread.start();
