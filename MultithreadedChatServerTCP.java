@@ -4,7 +4,9 @@ import java.io.*;
 
 public class MultithreadedChatServerTCP {
 	private static final int PORT = 1234;
-	private static ArrayList<ServerThread> threads = new ArrayList<ServerThread>();
+	public static ArrayList<ServerThread> threads = new ArrayList<ServerThread>();
+	public static ArrayList<Socket> dataSockets = new ArrayList<Socket>();
+	private static Integer socketCount = 0;
 	private static Integer threadCount = 0;
 
 	public static void main(String args[]) throws IOException {
@@ -14,16 +16,23 @@ public class MultithreadedChatServerTCP {
 		while (true) {
 
 			System.out.println("Server is waiting first client in port: " + PORT);
-			Socket dataSocket1 = connectionSocket.accept();
-			System.out.println("Received request from " + dataSocket1.getInetAddress());
-			System.out.println("Server is waiting second client in port: " + PORT);
-			Socket dataSocket2 = connectionSocket.accept();
-			System.out.println("Received request from " + dataSocket2.getInetAddress());
+			// Socket dataSocket1 = connectionSocket.accept();
+			// System.out.println("Received request from " + dataSocket1.getInetAddress());
+			dataSockets.add(socketCount, connectionSocket.accept());
+			System.out.println("Received request from " + dataSockets.get(0).getInetAddress());
+			socketCount++;
 
-			threads.add(threadCount, new ServerThread(dataSocket1, dataSocket2));
+			System.out.println("Server is waiting second client in port: " + PORT);
+
+			// Socket dataSocket2 = connectionSocket.accept();
+
+			dataSockets.add(socketCount, connectionSocket.accept());
+			System.out.println("Received request from " + dataSockets.get(1).getInetAddress());
+
+			threads.add(threadCount, new ServerThread(dataSockets.get(0), dataSockets.get(1)));
 
 			threadCount++;
-			threads.add(threadCount, new ServerThread(dataSocket2, dataSocket1));
+			threads.add(threadCount, new ServerThread(dataSockets.get(1), dataSockets.get(0)));
 
 			if (threadCount == 1) {
 				System.out.println("enough clients");
