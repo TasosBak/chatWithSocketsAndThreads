@@ -1,0 +1,13 @@
+{
+  "name": "Chat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "javac ChatClientProtocol.java && javac ChatClientWithThreads.java && javac ClientProtocol.java && javac EchoClientTCP.java && javac MultithreadedChatServerTCP.java && javac ServerThread.java && javac ServerProtocol.java"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
